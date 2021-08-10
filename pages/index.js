@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Button, Stack, Card, Heading, Page, TextField, DataTable, EmptyState } from "@shopify/polaris";
+import { Button, Stack, Card, Heading, Page, TextField, DataTable, EmptyState, Link } from "@shopify/polaris";
 import { ResourcePicker } from '@shopify/app-bridge-react';
 
 const Index = () => {
@@ -13,7 +13,7 @@ const Index = () => {
   const productTableDisplayData = useMemo(() => products.map((product) => [
     product.id,
     product.title,
-    `${product.title} $[appendTotTile]`,
+    `${product.title} ${appendToTitle}`,
     product.descriptionHtml,
     `${product.descriptionHtml} ${appendToDescription}`
   ]), [products, appendToTitle, appendToDescription])
@@ -22,6 +22,9 @@ const Index = () => {
   <Page>
     <Heading>This is a Shopify App 2</Heading>
     <Card>
+      <Card.Section>
+        <Link url="/about">About this app</Link>
+      </Card.Section>
       <Card.Section>
         <Stack vertical>
           <TextField
