@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react'
-import { Button, Stack, Card, Heading, Page, TextField, DataTable, EmptyState, Link } from "@shopify/polaris";
+import { useState, useMemo, useCallback } from 'react'
+import { Button, Stack, Card, Heading, Page, TextField, DataTable, EmptyState, Link, Toast, Frame } from "@shopify/polaris";
 import { ResourcePicker } from '@shopify/app-bridge-react';
+// import { Toast } from '@shopify/polaris/dist/types/latest/src/components/Frame/components';
+// import { Toast, Frame } from "@shopify/app-bridge/actions";
 
 const Index = () => {
 
@@ -18,7 +20,25 @@ const Index = () => {
     `${product.descriptionHtml} ${appendToDescription}`
   ]), [products, appendToTitle, appendToDescription])
 
+  const submitHandler = useCallback(
+    () => {
+      console.log('submitting');
+      setShowToast(true)
+    },
+    [],
+  )
+
+  const toastMarkup = showToast ?
+
+  <Toast
+    content="update success"
+    onDismiss={() => setShowToast(false)}
+    duration={4000}
+  /> : null
+
+
   return (
+  <Frame>
   <Page>
     <Heading>This is a Shopify App 2</Heading>
     <Card>
@@ -56,9 +76,15 @@ const Index = () => {
               headings={['ID', 'Old Title', 'New Title', 'Old Description', 'New Description']}
               rows={productTableDisplayData}
             /> : <EmptyState heading="no products selected" />}
+
+      </Card.Section>
+      <Card.Section>
+            <Button primary onClick={submitHandler} disabled={!products.length}>Submit</Button>
       </Card.Section>
     </Card>
   </Page>
+  {toastMarkup}
+  </Frame>
   )
   };
 
