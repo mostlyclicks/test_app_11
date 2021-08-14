@@ -1,8 +1,10 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Button, Stack, Card, Heading, Page, TextField, DataTable, EmptyState, Link, Toast, Frame } from "@shopify/polaris";
 import { ResourcePicker } from '@shopify/app-bridge-react';
-// import { Toast } from '@shopify/polaris/dist/types/latest/src/components/Frame/components';
-// import { Toast, Frame } from "@shopify/app-bridge/actions";
+
+import { useMutation } from 'react-apollo'
+import {ProductUpdateMutation} from '../graphql/ProductUpdate'
+
 
 const Index = () => {
 
@@ -10,7 +12,9 @@ const Index = () => {
   const [appendToDescription, setAppendToDescription] = useState('')
   const [pickerOpen, setPickerOpen] = useState(false)
   const [products, setProducts] = useState([])
-  const [showToast, setShowToast] = useState('')
+  const [showToast, setShowToast] = useState(false)
+
+  const [updateProduct] = useMutation(ProductUpdateMutation)
 
   const productTableDisplayData = useMemo(() => products.map((product) => [
     product.id,
@@ -20,12 +24,30 @@ const Index = () => {
     `${product.descriptionHtml} ${appendToDescription}`
   ]), [products, appendToTitle, appendToDescription])
 
-  const submitHandler = useCallback(
-    () => {
-      console.log('submitting');
-      setShowToast(true)
-    },
-    [],
+  const submitHandler = useCallback(() => {
+      
+    let count = 0
+    const runMutation = (product) => {
+      updateProduct({
+        variables: {
+          input: {
+            descriptionHtml: `${product.descriptionHtml}${appendToDescription}`,
+            title: `${product.title}${appendToTitle}`,
+            id: product.id
+          }
+        }
+      }).then((data) => {
+        console.log('Updated Product', count, data)
+        count++
+        if(products[count]) runMutation(products[count])
+        else {
+          console.log('Updates complete')
+          setShowToast(true)
+        }
+      })
+    }
+    runMutation(products[count])
+    },[products, appendToTitle, appendToDescription],
   )
 
   const toastMarkup = showToast ?
