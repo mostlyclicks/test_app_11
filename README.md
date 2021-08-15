@@ -13,7 +13,7 @@ mutation privateMetafieldUpsert($input: PrivateMetafieldInput!) {
 }
 
 
-// Create product
+// Create product / product update
 - webhook to run graphql mutation to create pick location meta field
 
 
