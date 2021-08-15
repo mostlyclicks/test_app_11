@@ -17,3 +17,27 @@ mutation productUpdate($input: ProductInput!) {
 
 
 `
+// metafields mutation
+
+// mutation productUpdate($input: ProductInput!) {
+//   productUpdate(input: $input) {
+//     product {
+//       id
+//       title
+//       description
+//       metafields (first: 10) {
+//         edges {
+//           node {
+//             id
+//           }
+//         }
+        
+//       }
+//     }
+//     userErrors {
+//       field
+//       message
+//     }
+    
+//   }
+// }
